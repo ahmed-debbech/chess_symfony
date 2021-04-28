@@ -39,14 +39,14 @@
                {% set dl = 1 %}
                <td class="light">
                   {% if p is not null %}
-                  {{p.coord}} 
+                  {% include 'game/pieces.html.twig' %}
                   {% endif %}
                </td>
                {% else %}
                {% set dl = 0 %}
                <td class="dark">
                   {% if p is not null %}
-                  {{p.coord}} 
+                  {% include 'game/pieces.html.twig' %}
                   {% endif %}
                </td>
                {% endif %}

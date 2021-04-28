@@ -1,0 +1,17 @@
+{% if p.color == 0 %}
+{% if p.piece == 'p'%}♟
+{% elseif p.piece == 'R' %}♜
+{% elseif p.piece == 'B' %}♝
+{% elseif p.piece == 'H' %}♞
+{% elseif p.piece == 'Q' %}♛
+{% elseif p.piece == 'K' %}♚
+{% endif %}
+{% else %}
+{% if p.piece == 'p'%}♙
+{% elseif p.piece == 'R' %}♖
+{% elseif p.piece == 'B' %}♗
+{% elseif p.piece == 'H' %}♘
+{% elseif p.piece == 'Q' %}♕
+{% elseif p.piece == 'K' %}♔
+{% endif %}
+{% endif %}
