@@ -88,7 +88,7 @@ class GameController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             return $this->redirectToRoute('play',['user' => $user,'id' => $id, 'move' => $form->getData()['move']]);
         }
-        return $this->render('game/game.html.twig', ['chars' => ["a","b","c","d","e", "f" ,"g","h"], 'user' => $user, 'form_move' => $form->createView(), 'board'=>$board]);
+        return $this->render('game/game.html.twig', ['id'=>$id, 'chars' => ["a","b","c","d","e", "f" ,"g","h"], 'user' => $user, 'form_move' => $form->createView(), 'board'=>$board]);
     }
     /**
      * @Route("/play/{user}/{id}/{move}", name="play")
