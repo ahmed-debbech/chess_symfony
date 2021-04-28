@@ -39,6 +39,7 @@ class Player
      */
     private $game;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +72,5 @@ class Player
 
         return $this;
     }
-
 
 }

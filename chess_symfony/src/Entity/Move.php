@@ -17,6 +17,7 @@ class Move
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
@@ -43,47 +44,6 @@ class Move
      * })
      */
     private $game;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getNum(): ?int
-    {
-        return $this->num;
-    }
-
-    public function setNum(int $num): self
-    {
-        $this->num = $num;
-
-        return $this;
-    }
-
-    public function getColor(): ?int
-    {
-        return $this->color;
-    }
-
-    public function setColor(int $color): self
-    {
-        $this->color = $color;
-
-        return $this;
-    }
-
-    public function getGame(): ?Game
-    {
-        return $this->game;
-    }
-
-    public function setGame(?Game $game): self
-    {
-        $this->game = $game;
-
-        return $this;
-    }
 
 
 }

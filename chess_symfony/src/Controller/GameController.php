@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Game;
 use App\Entity\Player;
+use App\Entity\Pieces;
 use App\Utils\Utilities;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
@@ -28,26 +29,46 @@ class GameController extends AbstractController
         //create game
         $em = $this ->getDoctrine()->getManager();
         $game = new Game();
-        $game->setId(Utilities::generateId($game,'id', $this->getDoctrine()));
+        $game->setId(Utilities::generateId(Game::class,'id', $this->getDoctrine()));
         $game->setInd(0);
         $em->persist($game);
         $em->flush();
         //create frist player
-        $em = $this ->getDoctrine()->getManager();
         $player = new Player();
-        $player->setId(Utilities::generateId($game,'id', $this->getDoctrine()));
+        $player->setId(Utilities::generateId(Player::class,'id', $this->getDoctrine()));
         $player->setGame($game);
         $player->setColor(Player::$WHITE); 
         $em->persist($player);
         $em->flush();
-
+        //create pieces
+        $arr = Utilities::initPieces($game, $this->getDoctrine());
+        foreach($arr as $p){
+            $em->persist($p);
+            $em->flush();
+        }
         return $this->redirectToRoute('game', ['id' => $game->getId()]);
     }
     /**
      * @Route("/game/{id}", name="game")
      */
-    public function game($id){
-        return $this->render('game/game.html.twig');
+    public function game($id, Request $req){
+        $form = $this->createFormBuilder()
+            ->add('move')
+            ->add('Play', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($req);
+        if($form->isSubmitted() && $form->isValid()){
+            return $this->redirectToRoute('play',['id' => $id, 'move' => $form->getData()['move']]);
+        }
+        return $this->render('game/game.html.twig', ['form_move' => $form->createView()]);
+    }
+    /**
+     * @Route("/play/{id}/{move}", name="play")
+     */
+    public function play($id, $move){
+        //we do checks later!
+
     }
     /**
      * @Route("/join", name="join")
@@ -70,7 +91,7 @@ class GameController extends AbstractController
                 //create second player
                 $em = $this ->getDoctrine()->getManager();
                 $player = new Player();
-                $player->setId(Utilities::generateId($game,'id', $this->getDoctrine()));
+                $player->setId(Utilities::generateId(Player::class,'id', $this->getDoctrine()));
                 $player->setGame($game);
                 $player->setColor(Player::$BLACK); 
                 $em->persist($player);
