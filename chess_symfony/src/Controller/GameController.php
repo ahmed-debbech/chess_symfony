@@ -64,15 +64,22 @@ class GameController extends AbstractController
         $pi= NULL;
         for($i=7; $i>=0; $i--){
             $y = 0; $a = array();
+            $pi = NULL;
             for($j=7; $j>=0; $j--){
+                $pi = NULL;
                 foreach($pieces as $r){
-                    $coo = $ch[$y].($j+1);
+                    $coo = $ch[$y].($i+1);
                     if($r->getCoord() == $coo){
                         $pi = $r;
                         break;
                     }
                 }
-                array_push($a, $pi);
+                if($pi != NULL){
+                    array_push($a, $pi);
+                }else{
+                    $pi = NULL;
+                    array_push($a, $pi);
+                }
                 $y++;
             }
             array_push($board, $a);
@@ -81,7 +88,7 @@ class GameController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             return $this->redirectToRoute('play',['id' => $id, 'move' => $form->getData()['move']]);
         }
-        return $this->render('game/game.html.twig', ['form_move' => $form->createView()]);
+        return $this->render('game/game.html.twig', ['form_move' => $form->createView(), 'board'=>$board]);
     }
     /**
      * @Route("/play/{id}/{move}", name="play")
