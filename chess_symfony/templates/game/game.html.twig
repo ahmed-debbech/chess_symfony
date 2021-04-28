@@ -2,7 +2,7 @@
 <html>
    <head>
       <title></title>
-      <meta charset="UTF-8">
+      <meta charsset="UTF-8">
       <style>
          .chess-board { border-spacing: 0; border-collapse: collapse; }
          .chess-board th { padding: .5em; }
@@ -38,23 +38,25 @@
             {% set dl = 0 %}
             {% for key,pi in board %}
             <tr>
-               <th>{{ 8-key }}</th>
+               <th>{{ 8-key }} {% set case = 8-key %}</th>
+               {% set ch = 0 %}
                {% for k,p in pi %}   
                {% if dl == 0 %}
                {% set dl = 1 %}
-               <td class="light">
+               <td onclick="document.getElementById('form_move').value = document.getElementById('form_move').value+'{{chars[ch]}}{{case}}';" class="light">
                   {% if p is not null %}
                   {% include 'game/pieces.html.twig' %}
                   {% endif %}
                </td>
                {% else %}
                {% set dl = 0 %}
-               <td class="dark">
+               <td onclick="document.getElementById('form_move').value = document.getElementById('form_move').value+'{{chars[ch]}}{{case}}';" class="dark">
                   {% if p is not null %}
                   {% include 'game/pieces.html.twig' %}
                   {% endif %}
                </td>
                {% endif %}
+               {% set ch = ch + 1 %}
                {% endfor %}
                {% if dl == 0 %}
                {% set dl = 1 %}

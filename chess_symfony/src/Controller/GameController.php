@@ -54,7 +54,7 @@ class GameController extends AbstractController
     public function game($user, $id, Request $req){
         $form = $this->createFormBuilder()
             ->add('move')
-            ->add('Play', SubmitType::class)
+            ->add('play', SubmitType::class)
             ->getForm();
 
         $form->handleRequest($req);
@@ -88,7 +88,7 @@ class GameController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             return $this->redirectToRoute('play',['user' => $user,'id' => $id, 'move' => $form->getData()['move']]);
         }
-        return $this->render('game/game.html.twig', ['user' => $user, 'form_move' => $form->createView(), 'board'=>$board]);
+        return $this->render('game/game.html.twig', ['chars' => ["a","b","c","d","e", "f" ,"g","h"], 'user' => $user, 'form_move' => $form->createView(), 'board'=>$board]);
     }
     /**
      * @Route("/play/{user}/{id}/{move}", name="play")
