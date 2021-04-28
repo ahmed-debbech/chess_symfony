@@ -108,6 +108,9 @@ class GameController extends AbstractController
                 $em->remove($piece1[0]);
                 $em->flush();
             }
+            if(($piece[0]->getPiece() == 'p') && (($to[1] == '8') || ($to[1] == '1'))){
+                $piece[0]->setPiece('Q');
+            }
             $piece[0]->setCoord($to);
             $em->persist($piece[0]);
             $em->flush();
