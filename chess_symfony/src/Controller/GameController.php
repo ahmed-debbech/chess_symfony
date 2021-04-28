@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Game;
+use App\Entity\Player;
 use App\Utils\Utilities;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
@@ -24,12 +25,22 @@ class GameController extends AbstractController
      * @Route("/create", name="create")
      */
     public function create(){
+        //create game
         $em = $this ->getDoctrine()->getManager();
         $game = new Game();
         $game->setId(Utilities::generateId($game,'id', $this->getDoctrine()));
         $game->setInd(0);
         $em->persist($game);
         $em->flush();
+        //create frist player
+        $em = $this ->getDoctrine()->getManager();
+        $player = new Player();
+        $player->setId(Utilities::generateId($game,'id', $this->getDoctrine()));
+        $player->setGame($game);
+        $player->setColor(Player::$WHITE); 
+        $em->persist($player);
+        $em->flush();
+
         return $this->redirectToRoute('game', ['id' => $game->getId()]);
     }
     /**
@@ -56,7 +67,16 @@ class GameController extends AbstractController
             if($game == NULL){
                 return new Response('no game found! press back');
             }else{
-                dd($game);
+                //create second player
+                $em = $this ->getDoctrine()->getManager();
+                $player = new Player();
+                $player->setId(Utilities::generateId($game,'id', $this->getDoctrine()));
+                $player->setGame($game);
+                $player->setColor(Player::$BLACK); 
+                $em->persist($player);
+                $em->flush();
+
+                return $this->redirectToRoute('game', ['id' => $game->getId()]);
             }
         }
         return $this->render('game/join.html.twig', ['gamejoin'=> $form->createView()]);

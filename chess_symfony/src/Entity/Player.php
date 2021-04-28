@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Player
 {
+    public static $BLACK =0;
+    public static $WHITE = 1;
     /**
      * @var int
      *
@@ -40,6 +42,10 @@ class Player
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     public function getColor(): ?int
