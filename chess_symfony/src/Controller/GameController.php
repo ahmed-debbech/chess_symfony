@@ -102,6 +102,11 @@ class GameController extends AbstractController
         $to = $move[4].$move[5];
         $piece = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $from, 'piece' => $piece]);
         $em = $this ->getDoctrine()->getManager();
+        $piece1 = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $to]);
+        if($piece1 != NULL){
+            $em->remove($piece1[0]);
+            $em->flush();
+        }
         $piece[0]->setCoord($to);
         $em->persist($piece[0]);
         $em->flush();
