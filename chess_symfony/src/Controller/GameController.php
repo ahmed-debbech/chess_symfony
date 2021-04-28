@@ -58,6 +58,26 @@ class GameController extends AbstractController
             ->getForm();
 
         $form->handleRequest($req);
+        $board= array();
+        $ch = array('a','b','c','d','e','f','g','h');
+        $pieces = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id]);
+        $pi= NULL;
+        for($i=7; $i>=0; $i--){
+            $y = 0; $a = array();
+            for($j=7; $j>=0; $j--){
+                foreach($pieces as $r){
+                    $coo = $ch[$y].($j+1);
+                    if($r->getCoord() == $coo){
+                        $pi = $r;
+                        break;
+                    }
+                }
+                array_push($a, $pi);
+                $y++;
+            }
+            array_push($board, $a);
+        }
+        //dd($board);
         if($form->isSubmitted() && $form->isValid()){
             return $this->redirectToRoute('play',['id' => $id, 'move' => $form->getData()['move']]);
         }
