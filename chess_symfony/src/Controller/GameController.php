@@ -95,7 +95,17 @@ class GameController extends AbstractController
      */
     public function play($id, $move){
         //we do checks later!
-
+        //exp: wHb1c3
+        $player = $move[0];
+        $piece = $move[1];
+        $from = $move[2].$move[3];
+        $to = $move[4].$move[5];
+        $piece = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $from, 'piece' => $piece]);
+        $em = $this ->getDoctrine()->getManager();
+        $piece[0]->setCoord($to);
+        $em->persist($piece[0]);
+        $em->flush();
+        return $this->redirectToRoute('game',['id' => $id]);
     }
     /**
      * @Route("/join", name="join")
