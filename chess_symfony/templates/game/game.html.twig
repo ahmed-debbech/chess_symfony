@@ -12,12 +12,17 @@
          .chess-board tr:last-child td { border-bottom: 1px solid; }
          .chess-board th:empty { border: none; }
          .chess-board td { width: 1.5em; height: 1.5em; text-align: center; font-size: 32px; line-height: 0;}
-         .chess-board .light { background: #eee; }
-         .chess-board .dark { background: #aaa; }
+         .chess-board .light { {% if user == 2 %} transform:rotate(180deg); {% endif %} background: #eee; }
+         .chess-board .dark { {% if user == 2 %} transform:rotate(180deg); {% endif %} background: #aaa; }
+            {% if user == 2 %}
+            #board {
+                transform:rotate(180deg);
+            }
+            {% endif %}
       </style>
    </head>
    <body>
-      <table class="chess-board">
+      <table id="board" class="chess-board">
          <tbody>
             <tr>
                <th></th>
@@ -62,7 +67,7 @@
       </table>
       {{ form(form_move) }}
       <button style="margin-left: 30%;" onclick="location.reload();">Reload</button>
-        <p>Just right the move to move a piece exp: wBc1g5 (case sensitive!!)</p>
+        <p>Just type the move to move a piece exp: wBc1g5 (case sensitive!!)</p>
         <p>wBc1g5 means:  <br>
         * w : white will play <br>
         * B : white will play the bishop <br>
@@ -78,5 +83,7 @@
         <li>'Q' : Queen</li>
         <li>'R' : Rook</li>
         </ul>
+        <p>To castle long side (queen side) write: wOL or bOL</p>
+        <p>To castle short side (king side) write: wOS or bOS</p>
    </body>
 </html>

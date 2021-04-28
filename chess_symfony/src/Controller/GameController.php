@@ -46,12 +46,12 @@ class GameController extends AbstractController
             $em->persist($p);
             $em->flush();
         }
-        return $this->redirectToRoute('game', ['id' => $game->getId()]);
+        return $this->redirectToRoute('game', ['user' => 1, 'id' => $game->getId()]);
     }
     /**
-     * @Route("/game/{id}", name="game")
+     * @Route("/game/{user}/{id}", name="game")
      */
-    public function game($id, Request $req){
+    public function game($user, $id, Request $req){
         $form = $this->createFormBuilder()
             ->add('move')
             ->add('Play', SubmitType::class)
@@ -86,31 +86,77 @@ class GameController extends AbstractController
         }
         //dd($board);
         if($form->isSubmitted() && $form->isValid()){
-            return $this->redirectToRoute('play',['id' => $id, 'move' => $form->getData()['move']]);
+            return $this->redirectToRoute('play',['user' => $user,'id' => $id, 'move' => $form->getData()['move']]);
         }
-        return $this->render('game/game.html.twig', ['form_move' => $form->createView(), 'board'=>$board]);
+        return $this->render('game/game.html.twig', ['user' => $user, 'form_move' => $form->createView(), 'board'=>$board]);
     }
     /**
-     * @Route("/play/{id}/{move}", name="play")
+     * @Route("/play/{user}/{id}/{move}", name="play")
      */
-    public function play($id, $move){
+    public function play($user, $id, $move){
         //we do checks later!
         //exp: wHb1c3
-        $player = $move[0];
-        $piece = $move[1];
-        $from = $move[2].$move[3];
-        $to = $move[4].$move[5];
-        $piece = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $from, 'piece' => $piece]);
         $em = $this ->getDoctrine()->getManager();
-        $piece1 = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $to]);
-        if($piece1 != NULL){
-            $em->remove($piece1[0]);
+        if($move[2] != 'L' && $move[2] != 'S'){
+            $player = $move[0];
+            $piece = $move[1];
+            $from = $move[2].$move[3];
+            $to = $move[4].$move[5];
+            $piece = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $from, 'piece' => $piece]);
+            $piece1 = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $to]);
+            if($piece1 != NULL){
+                $em->remove($piece1[0]);
+                $em->flush();
+            }
+            $piece[0]->setCoord($to);
+            $em->persist($piece[0]);
             $em->flush();
+        }else{
+            if($move[2] == 'S'){
+                //castling short
+                if($move[0] == 'w'){
+                    $k = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'K', 'color' => 1]);
+                    $r = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'R', 'coord' => 'h1']);
+                    $k[0]->setCoord('g1');
+                    $r[0]->setCoord('f1');
+                    $em->persist($k[0]);
+                    $em->flush();
+                    $em->persist($r[0]);
+                    $em->flush();
+                }else{
+                    $k = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'K', 'color' => 0]);
+                    $r = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'R', 'coord' => 'h8']);
+                    $k[0]->setCoord('g8');
+                    $r[0]->setCoord('f8');
+                    $em->persist($k[0]);
+                    $em->flush();
+                    $em->persist($r[0]);
+                    $em->flush();
+                }
+            }else{
+                //castling long
+                if($move[0] == 'w'){
+                    $k = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'K', 'color' => 1]);
+                    $r = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'R', 'coord' => 'a1']);
+                    $k[0]->setCoord('c1');
+                    $r[0]->setCoord('d1');
+                    $em->persist($k[0]);
+                    $em->flush();
+                    $em->persist($r[0]);
+                    $em->flush();
+                }else{
+                    $k = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'K', 'color' => 0]);
+                    $r = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'R', 'coord' => 'a8']);
+                    $k[0]->setCoord('c8');
+                    $r[0]->setCoord('d8');
+                    $em->persist($k[0]);
+                    $em->flush();
+                    $em->persist($r[0]);
+                    $em->flush();
+                }
+            }
         }
-        $piece[0]->setCoord($to);
-        $em->persist($piece[0]);
-        $em->flush();
-        return $this->redirectToRoute('game',['id' => $id]);
+        return $this->redirectToRoute('game',['user'=>$user , 'id' => $id]);
     }
     /**
      * @Route("/join", name="join")
@@ -139,7 +185,7 @@ class GameController extends AbstractController
                 $em->persist($player);
                 $em->flush();
 
-                return $this->redirectToRoute('game', ['id' => $game->getId()]);
+                return $this->redirectToRoute('game', ['user'=> 2,'id' => $game->getId()]);
             }
         }
         return $this->render('game/join.html.twig', ['gamejoin'=> $form->createView()]);
