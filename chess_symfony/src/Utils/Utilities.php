@@ -12,7 +12,7 @@ class Utilities {
         $article = NULL;
         $rand = 0;
         do{
-        $rand = rand(10000000, 99999999);
+        $rand = rand(1000, 9999);
         $article = $doctrine->getManager()
              ->getRepository($table)
              ->findOneBy(array($atr => $rand));

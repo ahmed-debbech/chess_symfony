@@ -1,17 +1,17 @@
 {% if p.color == 0 %}
-{% if p.piece == 'p'%}♟
-{% elseif p.piece == 'R' %}♜
-{% elseif p.piece == 'B' %}♝
-{% elseif p.piece == 'H' %}♞
-{% elseif p.piece == 'Q' %}♛
-{% elseif p.piece == 'K' %}♚
+{% if p.piece == 'p' and p.quit == NULL %}♟
+{% elseif p.piece == 'R' and p.quit == NULL %}♜
+{% elseif p.piece == 'B' and p.quit == NULL %}♝
+{% elseif p.piece == 'H' and p.quit == NULL %}♞
+{% elseif p.piece == 'Q' and p.quit == NULL %}♛
+{% elseif p.piece == 'K' and p.quit == NULL %}♚
 {% endif %}
 {% else %}
-{% if p.piece == 'p'%}♙
-{% elseif p.piece == 'R' %}♖
-{% elseif p.piece == 'B' %}♗
-{% elseif p.piece == 'H' %}♘
-{% elseif p.piece == 'Q' %}♕
-{% elseif p.piece == 'K' %}♔
+{% if p.piece == 'p' and p.quit == NULL %}♙
+{% elseif p.piece == 'R' and p.quit == NULL %}♖
+{% elseif p.piece == 'B' and p.quit == NULL %}♗
+{% elseif p.piece == 'H' and p.quit == NULL %}♘
+{% elseif p.piece == 'Q' and p.quit == NULL %}♕
+{% elseif p.piece == 'K' and p.quit == NULL %}♔
 {% endif %}
 {% endif %}

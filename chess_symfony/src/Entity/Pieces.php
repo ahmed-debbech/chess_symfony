@@ -52,6 +52,12 @@ class Pieces
      */
     private $game;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quit", type="integer", nullable=true)
+     */
+    private $quit;
 
     function __construct($game, $color, $piece, $coord, $doc){
         $this->id = Utilities::generateId(Pieces::class,'id', $doc);
@@ -105,7 +111,15 @@ class Pieces
 
         return $this;
     }
+    public function getQuit()
+    {
+        return $this->quit;
+    }
 
+    public function setQuit($q)
+    {
+        $this->quit = $q;
+    }
     public function getGame(): ?Game
     {
         return $this->game;

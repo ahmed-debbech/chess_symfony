@@ -1,0 +1,9 @@
+{% if p.color == 1 %}
+{% if p.piece == 'p' and p.quit == 1 %}♙
+{% elseif p.piece == 'R' and p.quit == 1 %}♖
+{% elseif p.piece == 'B' and p.quit == 1 %}♗
+{% elseif p.piece == 'H' and p.quit == 1 %}♘
+{% elseif p.piece == 'Q' and p.quit == 1 %}♕
+{% elseif p.piece == 'K' and p.quit == 1 %}♔
+{% endif %}
+{% endif %}

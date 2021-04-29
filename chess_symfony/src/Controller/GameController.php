@@ -70,8 +70,9 @@ class GameController extends AbstractController
                 foreach($pieces as $r){
                     $coo = $ch[$y].($i+1);
                     if($r->getCoord() == $coo){
-                        $pi = $r;
-                        break;
+                        if($r->getQuit() != 1){
+                            $pi = $r;
+                        }
                     }
                 }
                 if($pi != NULL){
@@ -84,11 +85,12 @@ class GameController extends AbstractController
             }
             array_push($board, $a);
         }
+        $dead = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'quit' => 1]);
         //dd($board);
         if($form->isSubmitted() && $form->isValid()){
             return $this->redirectToRoute('play',['user' => $user,'id' => $id, 'move' => $form->getData()['move']]);
         }
-        return $this->render('game/game.html.twig', ['id'=>$id, 'chars' => ["a","b","c","d","e", "f" ,"g","h"], 'user' => $user, 'form_move' => $form->createView(), 'board'=>$board]);
+        return $this->render('game/game.html.twig', ['dead' => $dead, 'id'=>$id, 'chars' => ["a","b","c","d","e", "f" ,"g","h"], 'user' => $user, 'form_move' => $form->createView(), 'board'=>$board]);
     }
     /**
      * @Route("/play/{user}/{id}/{move}", name="play")
@@ -105,7 +107,8 @@ class GameController extends AbstractController
             $piece = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $from, 'piece' => $piece]);
             $piece1 = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $to]);
             if($piece1 != NULL){
-                $em->remove($piece1[0]);
+                $piece1[0]->setQuit(1);
+                $em->persist($piece1[0]);
                 $em->flush();
             }
             if(($piece[0]->getPiece() == 'p') && (($to[1] == '8') || ($to[1] == '1'))){
