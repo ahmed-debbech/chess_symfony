@@ -100,10 +100,9 @@ class GameController extends AbstractController
         //exp: wHb1c3
         $em = $this ->getDoctrine()->getManager();
         if($move[2] != 'L' && $move[2] != 'S'){
-            $player = $move[0];
-            $piece = $move[1];
-            $from = $move[2].$move[3];
-            $to = $move[4].$move[5];
+            $piece = $move[0];
+            $from = $move[1].$move[2];
+            $to = $move[3].$move[4];
             $piece = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $from, 'piece' => $piece]);
             $piece1 = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'coord' => $to]);
             if($piece1 != NULL){
