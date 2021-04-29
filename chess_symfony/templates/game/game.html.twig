@@ -78,7 +78,7 @@
          <tbody>
          <tr>
          {% for p in dead %}
-         {% if id == 1 %}
+         {% if user == 1 %}
          {% if p.color == 1 %}
          <td class="light">
             {% include 'game/pieces-dead-white.html.twig' %}
@@ -97,11 +97,11 @@
          </table>
 
          
-         <table id="board" style="padding: 10px; margin-top: 50%;" class="chess-board">
+         <table id="board" style="padding: 10px; margin-top: 10%;" class="chess-board">
          <tbody>
          <tr>
          {% for p in dead %}
-         {% if id == 1 %}
+         {% if user == 1 %}
          {% if p.color == 0 %}
          <td class="light" >
             {% include 'game/pieces-dead-black.html.twig' %}
@@ -123,23 +123,9 @@
       </table>
       {{ form(form_move) }}
       <button style="margin-left: 30%;" onclick="location.reload();">Reload</button>
-        <p>Just type the move to move a piece exp: wBc1g5 (case sensitive!!)</p>
-        <p>wBc1g5 means:  <br>
-        * w : white will play <br>
-        * B : white will play the bishop <br>
-        * c1 : white will move bishop from c1 <br>
-        * g5 : to g5 case
-        </p>
-        <p>don't forget that: </p>
-        <ul>
-        <li>'p' : pawn</li>
-        <li>'B' : bishop</li>
-        <li>'H' : Knight</li>
-        <li>'K' : King</li>
-        <li>'Q' : Queen</li>
-        <li>'R' : Rook</li>
-        </ul>
-        <p>To castle long side (queen side) write: wOL or bOL</p>
-        <p>To castle short side (king side) write: wOS or bOS</p>
+         <h4>Manual</h4>
+        <p>Just click a piece you want to move and click the case you want put it in.</p>
+        <p>To castle long side (queen side) write: OL</p>
+        <p>To castle short side (king side) write: OS</p>
    </body>
 </html>

@@ -99,7 +99,7 @@ class GameController extends AbstractController
         //we do checks later!
         //exp: wHb1c3
         $em = $this ->getDoctrine()->getManager();
-        if($move[2] != 'L' && $move[2] != 'S'){
+        if($move[0] != 'O'){
             $piece = $move[0];
             $from = $move[1].$move[2];
             $to = $move[3].$move[4];
@@ -117,9 +117,9 @@ class GameController extends AbstractController
             $em->persist($piece[0]);
             $em->flush();
         }else{
-            if($move[2] == 'S'){
+            if($move[1] == 'S'){
                 //castling short
-                if($move[0] == 'w'){
+                if($user == 1){
                     $k = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'K', 'color' => 1]);
                     $r = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'R', 'coord' => 'h1']);
                     $k[0]->setCoord('g1');
@@ -140,7 +140,7 @@ class GameController extends AbstractController
                 }
             }else{
                 //castling long
-                if($move[0] == 'w'){
+                if($user == 1){
                     $k = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'K', 'color' => 1]);
                     $r = $this->getDoctrine()->getRepository(Pieces::class)->findBy(['game' => $id, 'piece' => 'R', 'coord' => 'a1']);
                     $k[0]->setCoord('c1');
