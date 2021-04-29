@@ -20,6 +20,7 @@
             }
             {% endif %}
       </style>
+      <script type="text/javascript" src="{{asset('click.js')}}"></script>
    </head>
    <body>
    <h3>Code: {{id}}</h3>
@@ -47,14 +48,14 @@
                {% for k,p in pi %}   
                {% if dl == 0 %}
                {% set dl = 1 %}
-               <td onclick="document.getElementById('form_move').value = document.getElementById('form_move').value+'{{chars[ch]}}{{case}}';" class="light">
+               <td id="{{chars[ch]}}{{case}}" onclick="cl('{{chars[ch]}}{{case}}');" class="light">
                   {% if p is not null %}
                   {% include 'game/pieces.html.twig' %}
                   {% endif %}
                </td>
                {% else %}
                {% set dl = 0 %}
-               <td onclick="document.getElementById('form_move').value = document.getElementById('form_move').value+'{{chars[ch]}}{{case}}';" class="dark">
+               <td id="{{chars[ch]}}{{case}}" onclick="cl('{{chars[ch]}}{{case}}');" class="dark">
                   {% if p is not null %}
                   {% include 'game/pieces.html.twig' %}
                   {% endif %}
@@ -73,30 +74,46 @@
       </table>
       </td>
       <td>
-         <table style="margin-top: 10%;" class="chess-board">
+         <table id="board" style="margin-top: 10%;" class="chess-board">
          <tbody>
          <tr>
          {% for p in dead %}
+         {% if id == 1 %}
          {% if p.color == 1 %}
          <td class="light">
             {% include 'game/pieces-dead-white.html.twig' %}
          </td>
          {% endif %} 
+         {% else %}
+         {% if p.color == 0 %}
+         <td class="light">
+            {% include 'game/pieces-dead-black.html.twig' %}
+         </td>
+         {% endif %} 
+         {% endif %}
          {% endfor %}
          </tr>
          </tbody>
          </table>
 
          
-         <table style="padding: 10px; margin-top: 50%;" class="chess-board">
+         <table id="board" style="padding: 10px; margin-top: 50%;" class="chess-board">
          <tbody>
          <tr>
          {% for p in dead %}
+         {% if id == 1 %}
          {% if p.color == 0 %}
          <td class="light" >
             {% include 'game/pieces-dead-black.html.twig' %}
          </td>
          {% endif %} 
+         {% else %}
+         {% if p.color == 1 %}
+         <td class="light" >
+            {% include 'game/pieces-dead-white.html.twig' %}
+         </td>
+         {% endif %} 
+         {% endif %}
          {% endfor %}
          </tr>
          </tbody>
